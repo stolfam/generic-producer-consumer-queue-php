@@ -1,6 +1,9 @@
 # generic-producer-consumer-queue-php
 If you struggling with queueing your data streams like bulk imports or exports, you can use my simple solution. These are simple classes for queueing data streams.
 
+## Requirements
+- PHP 8
+
 ## Preparing
 Prepare your messages extending `abstract class Message`. It prevents parsing errors with built-in function `isValid()` located in abstract constructor.
 
