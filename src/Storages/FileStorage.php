@@ -44,7 +44,7 @@
 
         private function getSafeFilename(Message $message): string
         {
-            return time() . "_" . str_replace(["/", "\\"], "-", $message::class) . "_" .
+            return microtime(true) . "_" . str_replace(["/", "\\"], "-", $message::class) . "_" .
                 md5(openssl_random_pseudo_bytes(16)) . ".json";
         }
 

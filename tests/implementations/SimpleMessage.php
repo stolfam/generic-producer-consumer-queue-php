@@ -13,24 +13,24 @@
     final class SimpleMessage extends Message
     {
         public int $id;
-        public int $ts;
+        public float $ts;
 
         /**
          * SimpleMessage constructor.
-         * @param int      $id
-         * @param int|null $ts
+         * @param int        $id
+         * @param float|null $ts
          */
-        public function __construct(int $id, ?int $ts = null)
+        public function __construct(int $id, ?float $ts = null)
         {
             $this->id = $id;
-            $this->ts = $ts ?? time();
+            $this->ts = $ts ?? microtime(true);
         }
 
         public static function createFromJson(string $json): Message
         {
             $o = json_decode($json);
 
-            return new SimpleMessage($o->id, $o->ts);
+            return new SimpleMessage((int) $o->id, (float) $o->ts);
         }
 
         public function toJson(): string

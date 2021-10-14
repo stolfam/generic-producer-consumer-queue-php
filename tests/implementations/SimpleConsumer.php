@@ -15,7 +15,9 @@
         public function processMessage(Message $message): bool
         {
             if ($message instanceof SimpleMessage) {
-                echo "Message #" . $message->id . " processed.\n";
+                //$ts = strtotime($message->ts);
+                echo "Message #" . $message->id . " received at " . $message->ts .
+                    " processed at time " . date("H:i:s") . "\n";
 
                 return true;
             }
