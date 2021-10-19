@@ -10,4 +10,6 @@
     interface Consumer
     {
         public function processMessage(Message $message): bool;
+
+        public function listErrors(): array;
     }

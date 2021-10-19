@@ -16,6 +16,11 @@
         private string $path;
 
         private ?string $currentMessage = null;
+        private ?string $currentFile = null;
+
+        public array $ignorePatterns = [
+            "^\.gitignore$"
+        ];
 
         /**
          * FileStorage constructor.
@@ -32,6 +37,10 @@
 
         public function addMessage(Message $message): bool
         {
+            if (!Message::isValid($message)) {
+                return false;
+            }
+
             $fullMessage = [
                 "type" => $message::class,
                 "json" => $message->toJson()
@@ -56,7 +65,20 @@
                     continue;
                 }
 
+                $ignore = false;
+                foreach ($this->ignorePatterns as $ignorePattern) {
+                    if (preg_match("~$ignorePattern~i", $file)) {
+                        $ignore = true;
+                        continue;
+                    }
+                }
+
+                if ($ignore) {
+                    continue;
+                }
+
                 $this->currentMessage = $this->path . "/" . $file;
+                $this->currentFile = $file;
 
                 $fullMessage = json_decode(file_get_contents($this->path . "/" . $file));
 
@@ -75,5 +97,16 @@
             if (!empty($this->currentMessage)) {
                 return unlink($this->currentMessage);
             }
+        }
+
+        public function decreasePriorityOfCurrentMessage(): bool
+        {
+            $fragments = explode("_", $this->currentFile);
+            $newFilename = microtime(true);
+            for ($i = 1; $i < count($fragments); $i++) {
+                $newFilename .= "_" . $fragments[$i];
+            }
+
+            return rename($this->currentMessage, $this->path . "/" . $newFilename);
         }
     }

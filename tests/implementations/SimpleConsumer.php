@@ -16,8 +16,8 @@
         {
             if ($message instanceof SimpleMessage) {
                 //$ts = strtotime($message->ts);
-                echo "Message #" . $message->id . " received at " . $message->ts .
-                    " processed at time " . date("H:i:s") . "\n";
+                echo "Message #" . $message->id . " received at " . $message->ts . " processed at time " .
+                    date("H:i:s") . "\n";
 
                 return true;
             }
@@ -28,5 +28,10 @@
         public static function getProcessableType(): string
         {
             return SimpleMessage::class;
+        }
+
+        public function listErrors(): array
+        {
+            return [];
         }
     }

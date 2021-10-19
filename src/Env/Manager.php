@@ -55,7 +55,10 @@
                         if ($consumer->processMessage($message)) {
                             $this->storage->dropCurrentMessage();
                         } else {
-                            $this->errors[] = "Message was not processed.";
+                            $this->storage->decreasePriorityOfCurrentMessage();
+                            foreach ($consumer->listErrors() as $error) {
+                                $this->errors[] = $error;
+                            }
                         }
                     }
                 }

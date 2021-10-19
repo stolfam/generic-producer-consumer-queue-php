@@ -28,4 +28,9 @@
 
             return false;
         }
+
+        public function listErrors(): array
+        {
+            return [];
+        }
     }

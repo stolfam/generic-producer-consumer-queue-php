@@ -14,4 +14,6 @@
         public function nextMessage(): ?Message;
 
         public function dropCurrentMessage(): bool;
+
+        public function decreasePriorityOfCurrentMessage(): bool;
     }
