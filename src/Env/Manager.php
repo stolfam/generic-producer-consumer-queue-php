@@ -15,7 +15,7 @@
         private Storage $storage;
 
         /** @var string[] */
-        private array $errors = [];
+        public array $errors = [];
 
         /**
          * ConsumerManager constructor.
