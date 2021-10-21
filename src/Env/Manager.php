@@ -40,6 +40,10 @@
          */
         public function addConsumer(Consumer $consumer): void
         {
+            if ($consumer instanceof LinkedConsumer) {
+                echo "Link manager with consumer\n";
+                $consumer->setManagerReference($this);
+            }
             $this->consumers[spl_object_hash($consumer)] = $consumer;
         }
 

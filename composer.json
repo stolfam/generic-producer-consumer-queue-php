@@ -2,7 +2,7 @@
   "name": "stolfam/generic-producer-consumer-queue-php",
   "license": "MIT",
   "description": "Simple PHP8 classes for queueing data streams.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "library",
   "require": {
     "php": ">= 8.0"
