@@ -16,4 +16,6 @@
         public function dropCurrentMessage(): bool;
 
         public function decreasePriorityOfCurrentMessage(): bool;
+
+        public function messagesCount(): int;
     }

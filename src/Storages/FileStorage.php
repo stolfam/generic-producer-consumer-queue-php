@@ -18,6 +18,8 @@
         private ?string $currentMessage = null;
         private ?string $currentFile = null;
 
+        private int $messagesCount = 0;
+
         public array $ignorePatterns = [
             "^\.gitignore$"
         ];
@@ -33,6 +35,9 @@
             if (!file_exists($this->path)) {
                 mkdir($this->path);
             }
+
+            $files = scandir($this->path);
+            $this->messagesCount = count($files) - 2;
         }
 
         public function addMessage(Message $message): bool
@@ -60,6 +65,7 @@
         public function nextMessage(): ?Message
         {
             $files = scandir($this->path);
+            $this->messagesCount = count($files) - 2; // update
             foreach ($files as $file) {
                 if ($file == "." || $file == "..") {
                     continue;
@@ -108,5 +114,10 @@
             }
 
             return rename($this->currentMessage, $this->path . "/" . $newFilename);
+        }
+
+        public function messagesCount(): int
+        {
+            return $this->messagesCount;
         }
     }
