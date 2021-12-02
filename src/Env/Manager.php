@@ -17,6 +17,8 @@
         /** @var string[] */
         public array $errors = [];
 
+        private array $readMessageHashes = [];
+
         /**
          * ConsumerManager constructor.
          * @param Storage $storage
@@ -54,7 +56,13 @@
             for ($i = 0; $i < $rounds; $i++) {
                 foreach ($this->consumers as $consumer) {
                     $message = $this->storage->nextMessage();
+
                     if ($message !== null) {
+                        if ($this->wasMessageRead($message)) {
+                            $this->storage->decreasePriorityOfCurrentMessage();
+                            continue;
+                        }
+
                         if ($consumer->processMessage($message)) {
                             $this->storage->dropCurrentMessage();
                         } else {
@@ -63,12 +71,25 @@
                                 $this->errors[] = $error;
                             }
                         }
+
+                        $this->notifyMessageRead($message);
                     }
                 }
             }
         }
 
-        public function messagesCount(): int {
+        public function messagesCount(): int
+        {
             return $this->storage->messagesCount();
+        }
+
+        private function notifyMessageRead(Message $message): void
+        {
+            $this->readMessageHashes[] = md5($message->toJson());
+        }
+
+        private function wasMessageRead(Message $message): bool
+        {
+            return in_array(md5($message->toJson()), $this->readMessageHashes);
         }
     }

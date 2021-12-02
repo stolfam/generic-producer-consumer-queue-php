@@ -12,7 +12,7 @@
     $manager->addConsumer(new \Stolfam\GPCQ\Test\JsonConsumer());
 
     while (true) {
-        $manager->run(5);
+        $manager->run(50);
         echo "Waiting for next messages ...\n";
         sleep(1);
     }

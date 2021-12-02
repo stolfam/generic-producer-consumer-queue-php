@@ -26,7 +26,7 @@
     $files = scandir(__DIR__ . "/temp");
     echo getFilename() . "\n";
 
-    $manager->run();
+    $manager->run(50);
 
     echo getFilename() . "\n";
     unlink(__DIR__ . "/temp/" . getFilename());
