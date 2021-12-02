@@ -54,11 +54,11 @@
         public function run(int $rounds = 1): void
         {
             for ($i = 0; $i < $rounds; $i++) {
-                foreach ($this->consumers as $consumer) {
+                foreach ($this->consumers as $id => $consumer) {
                     $message = $this->storage->nextMessage();
 
                     if ($message !== null) {
-                        if ($this->wasMessageRead($message)) {
+                        if ($this->wasMessageRead($id, $message)) {
                             $this->storage->decreasePriorityOfCurrentMessage();
                             continue;
                         }
@@ -72,7 +72,7 @@
                             }
                         }
 
-                        $this->notifyMessageRead($message);
+                        $this->notifyMessageRead($id, $message);
                     }
                 }
             }
@@ -83,13 +83,17 @@
             return $this->storage->messagesCount();
         }
 
-        private function notifyMessageRead(Message $message): void
+        private function notifyMessageRead(string $consumerId, Message $message): void
         {
-            $this->readMessageHashes[] = md5($message->toJson());
+            $this->readMessageHashes[$consumerId][] = md5($message->toJson());
         }
 
-        private function wasMessageRead(Message $message): bool
+        private function wasMessageRead(string $consumerId, Message $message): bool
         {
-            return in_array(md5($message->toJson()), $this->readMessageHashes);
+            if (!isset($this->readMessageHashes[$consumerId])) {
+                return false;
+            }
+
+            return in_array(md5($message->toJson()), $this->readMessageHashes[$consumerId]);
         }
     }
